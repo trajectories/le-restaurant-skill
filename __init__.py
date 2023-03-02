@@ -17,7 +17,7 @@ class LeRestaurant(MycroftSkill):
         self.speak_dialog('restaurant.le')
         self.headers = {
         	"Content-Type": "application/json",
-        	"Authorization": "Bearer {api_key}",
+        	"Authorization": f"Bearer {api_key}",
         }
         self.speak('this is my statement')
         data = {"query": "hi"}
@@ -27,7 +27,7 @@ class LeRestaurant(MycroftSkill):
         	for channel_message in channel_result.get('channel-message', []):
         		if channel_messasge.get('templete-type') == 'text':
         			message = channel_message.get('templete')
-        print("=========>MindExpresssssssssssssssssssion", message)
+        print("=========>MindExpression", message)
 """
     def handle_mind_expression_query(self, message):
     	self.headers = {
