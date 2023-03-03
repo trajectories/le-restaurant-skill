@@ -37,7 +37,7 @@ class LeRestaurant(MycroftSkill):
         self.add_event('recognizer_loop:utterance', self.handle_utterance)
 
     def handle_utterance(self, message):
-        while self.template != "ขอบคุณที่เข้ามาคุยกับเรานะคะ ไว้โอกาสหน้าแวะมาใหม่นะคะ ขอบคุณค่ะ":
+        if self.template != "ขอบคุณที่เข้ามาคุยกับเรานะคะ ไว้โอกาสหน้าแวะมาใหม่นะคะ ขอบคุณค่ะ":
             utterance = message.data.get('utterances')[0]
             data = {"query": utterance}
             headers["X-Conversation-Id"] = self.conversation_id
@@ -45,7 +45,8 @@ class LeRestaurant(MycroftSkill):
             response_data = response.json()
             self.template = response_data['data']['channel-result'][0]['channel-message']['template']
             self.speak(self.template)
-        self.stop()
+        else:
+            self.stop()
 
     def stop(self):
         self.status = False
