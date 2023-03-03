@@ -46,6 +46,7 @@ class LeRestaurant(MycroftSkill):
             self.template = response_data['data']['channel-result'][0]['channel-message']['template']
             self.speak(self.template)
         else:
+            self.speak(self.template)
             self.stop()
 
     def stop(self):
