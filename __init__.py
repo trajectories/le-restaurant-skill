@@ -17,6 +17,8 @@ class LeRestaurant(MycroftSkill):
 
     @intent_file_handler('restaurant.le.intent')
     def handle_restaurant_le(self, message):
+        # Block all other skills from running
+        self.block_all()
         # welcome!
         self.speak_dialog('restaurant.le')
         self.handle_mind_expression()
@@ -52,6 +54,8 @@ class LeRestaurant(MycroftSkill):
     def stop(self):
         self.status = False
         self.remove_event('recognizer_loop:utterance', self.handle_utterance)
+        # Unblock all other skills to resume normal operation
+        self.unblock_all()
 
 def create_skill():
     return LeRestaurant()
