@@ -10,10 +10,9 @@ class LeRestaurant(MycroftSkill):
         # Initialize conversation ID
         self.conversation_id = None
 
-    def handle_mindx_response(self, message):
+    def handle_mindx_response(self, msg):
         # Send query to MindX API and retrieve response
-        message = message.data.get('utterance')
-        data = {"query": message}
+        data = {"query": msg}
         headers = {"Content-Type": "application/json",
                    "Authorization": f"Bearer {self.settings.get('api_key')}"}
         if self.conversation_id is not None:
@@ -25,14 +24,16 @@ class LeRestaurant(MycroftSkill):
 
     @intent_handler('restaurant.le.intent')
     def handle_restaurant_le(self, message):
+        self.log.info("Le Restaurant skill is running")
         # Block all other skills from running
+        msg = message.data.get('utterance')
         self.block_all()
-        self.handle_mindx_response(message)
+        self.handle_mindx_response(msg)
         self.speak(self.template)
         # Listen to user input until the user says "ขอบคุณครับ"
         while self.template != "ขอบคุณที่เข้ามาคุยกับเรานะคะ ไว้โอกาสหน้าแวะมาใหม่นะคะ ขอบคุณค่ะ":
-            user_input = self.get_response()
-            self.handle_mindx_response(user_input)
+            msg = message.data.get('utterance')
+            self.handle_mindx_response(msg)
             self.speak(self.template)
         # Unblock all other skills to resume normal operation
         self.unblock_all()
