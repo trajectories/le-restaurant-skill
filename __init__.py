@@ -26,12 +26,13 @@ class LeRestaurant(MycroftSkill):
         msg = "LeRestaurant Skill is loaded"
         self.bus.emit(Message('recognizer_loop:utterance', {"utterances": [
                       msg], "lang": self.lang}))  # , "session": session_id}))
-        self.bus.emit(Message('speak', {"utterance": msg,"lang": self.lang}))
+        self.bus.emit(Message('speak', {"utterance": msg, "lang": self.lang}))
 
-        
     def sendHandler(self, message):
         # sendData = message.data.get("utterance")
         # logger.info("Sending to Le restaurant: " + sendData)
+        # Block all other skills from running
+        self.block_all()
         query = "สวัสดี"
         data = {"query": query}
         response = requests.post(url, headers=headers, json=data)
@@ -47,8 +48,9 @@ class LeRestaurant(MycroftSkill):
 
     def shutdown(self):  # shutdown routine
         if self.template == "ขอบคุณที่เข้ามาคุยกับเรานะคะ ไว้โอกาสหน้าแวะมาใหม่นะคะ ขอบคุณค่ะ":
-            super(LeRestaurant, self).shutdown()
-
+            # Unblock all other skills to resume normal operation
+            self.unblock_all()
+        super(LeRestaurant, self).shutdown()
 
     # @intent_file_handler('restaurant.le.intent')
     # def handle_restaurant_le(self, message):
