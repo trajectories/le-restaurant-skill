@@ -17,7 +17,7 @@ status = False
 
 class LeRestaurant(MycroftSkill):
     def __init__(self):
-        super(LeRestaurant, self).__init__(name="LeRestaurant")
+        MycroftSkill.__init__(self)
 
     def initialize(self):
         self.handle_restaurant_le()
