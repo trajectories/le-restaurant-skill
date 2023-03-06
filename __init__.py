@@ -23,7 +23,7 @@ class LeRestaurant(MycroftSkill):
         # Handling settings changes
         self.add_event('LeRestaurant-skill:response', self.sendHandler)
         self.add_event('speak', self.responseHandler)
-        msg = "LeRestaurant Skill is loaded"
+        msg = "le restaurant"
         self.bus.emit(Message('recognizer_loop:utterance', {"utterances": [
                       msg], "lang": self.lang}))  # , "session": session_id}))
         self.bus.emit(Message('speak', {"utterance": msg, "lang": self.lang}))
