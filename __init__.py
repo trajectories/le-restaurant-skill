@@ -13,6 +13,7 @@ class LeRestaurant(MycroftSkill):
     def initialize(self):
         # Initialize conversation ID
         self.conversation_id = None
+        self.block_all()
 
     def handle_mindx_response(self, msg):
         # Send query to MindX API and retrieve response
@@ -37,7 +38,7 @@ class LeRestaurant(MycroftSkill):
         self.log.info("Le Restaurant skill is running")
         # Block all other skills from running
         msg = message.data.get('utterance')
-        self.block_all()
+        
         self.handle_mindx_response(msg)
         self.speak(self.template)
         # Listen to user input until the user says "ขอบคุณครับ"
@@ -46,11 +47,11 @@ class LeRestaurant(MycroftSkill):
             self.handle_mindx_response(msg)
             self.speak(self.template)
         # Unblock all other skills to resume normal operation
-        self.unblock_all()
+        
 
     def shutdown(self):
         # Unblock all other skills to resume normal operation
-        self.unblock_all()
+        self.block_all()
         super().shutdown()
 
 
