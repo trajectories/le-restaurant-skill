@@ -2,6 +2,10 @@ from mycroft import MycroftSkill, intent_handler
 import requests
 import json
 
+url = "https://mindx.mind.ai/api/v1/gateway/default/u0W0dvyUR9K_pUX5-bEZlg/2ILfgsKlSHi7bcFDc8DPnQ"
+api_key = 'kq2kYszSQGesoMhXZfmpXA'
+
+
 class LeRestaurant(MycroftSkill):
     def __init__(self):
         super().__init__(name="LeRestaurant")
@@ -13,11 +17,17 @@ class LeRestaurant(MycroftSkill):
     def handle_mindx_response(self, msg):
         # Send query to MindX API and retrieve response
         data = {"query": msg}
-        headers = {"Content-Type": "application/json",
-                   "Authorization": f"Bearer {self.settings.get('api_key')}"}
+        # headers = {"Content-Type": "application/json",
+        #            "Authorization": "Bearer " + {self.settings.get('api_key')}}
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer "+api_key,
+        }
         if self.conversation_id is not None:
             headers["X-Conversation-Id"] = self.conversation_id
-        response = requests.post(self.settings.get('url'), headers=headers, json=data)
+        # response = requests.post(self.settings.get(
+        #     'url'), headers=headers, json=data)
+        response = requests.post(url, headers=headers, json=data)
         response_data = response.json()
         self.template = response_data['data']['channel-result'][0]['channel-message']['template']
         self.conversation_id = response_data['data']['conversation_id']
