@@ -20,20 +20,11 @@ class LeRestaurant(MycroftSkill):
         super(LeRestaurant, self).__init__(name="LeRestaurant")
 
     def initialize(self):
-        # Handling settings changes
-        self.add_event('LeRestaurant-skill:response', self.sendHandler)
-        self.add_event('speak', self.responseHandler)
-        msg = "le restaurant"
-        self.bus.emit(Message('recognizer_loop:utterance', {"utterances": [
-                      msg], "lang": self.lang}))  # , "session": session_id}))
-        self.bus.emit(Message('speak', {"utterance": msg, "lang": self.lang}))
-
+        self.handle_restaurant_le()
+        
     def sendHandler(self, message):
-        # sendData = message.data.get("utterance")
-        # logger.info("Sending to Le restaurant: " + sendData)
-        # Block all other skills from running
-        self.block_all()
-        query = "สวัสดี"
+        query = message.data.get("utterance")
+        # query = "สวัสดี"
         data = {"query": query}
         response = requests.post(url, headers=headers, json=data)
         response_data = response.json()
@@ -52,48 +43,23 @@ class LeRestaurant(MycroftSkill):
             self.unblock_all()
         super(LeRestaurant, self).shutdown()
 
-    # @intent_file_handler('restaurant.le.intent')
-    # def handle_restaurant_le(self, message):
-    #     # Block all other skills from running
-    #     # self.block_all()
-    #     # welcome!
-    #     self.speak_dialog('restaurant.le')
-    #     self.handle_mind_expression()
-    #     self.start_conversation()
-
-    # def handle_mind_expression(self):
-    #     query = "สวัสดี"
-    #     data = {"query": query}
-    #     response = requests.post(url, headers=headers, json=data)
-    #     response_data = response.json()
-    #     self.template = response_data['data']['channel-result'][0]['channel-message']['template']
-    #     self.speak(self.template)
-    #     self.conversation_id = response_data['data']['conversation_id']
-    #     self.status = True
-    #     self.start_conversation()
-
+    @intent_file_handler('restaurant.le.intent')
+    def handle_restaurant_le(self):
+        # Block all other skills from running
+        self.block_all()
+        # welcome!
+        self.speak_dialog('restaurant.le')
+        self.add_event('LeRestaurant-skill:response', self.sendHandler)
+        self.add_event('speak', self.responseHandler)
+    
     # def start_conversation(self):
     #     self.add_event('recognizer_loop:utterance', self.handle_utterance)
-
-    # def handle_utterance(self, message):
-    #     if self.template != "ขอบคุณที่เข้ามาคุยกับเรานะคะ ไว้โอกาสหน้าแวะมาใหม่นะคะ ขอบคุณค่ะ":
-    #         utterance = message.data.get('utterances')[0]
-    #         data = {"query": utterance}
-    #         headers["X-Conversation-Id"] = self.conversation_id
-    #         response = requests.post(url, headers=headers, json=data)
-    #         response_data = response.json()
-    #         self.template = response_data['data']['channel-result'][0]['channel-message']['template']
-    #         self.speak(self.template)
-    #     else:
-    #         self.speak(self.template)
-    #         self.stop()
 
     # def stop(self):
     #     self.status = False
     #     self.remove_event('recognizer_loop:utterance', self.handle_utterance)
     #     # Unblock all other skills to resume normal operation
     #     self.unblock_all()
-
 
 def create_skill():
     return LeRestaurant()
