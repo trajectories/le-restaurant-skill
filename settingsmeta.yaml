@@ -1,22 +1,57 @@
-
 skillMetadata:
-  sections:
-    - name: Options << Name of section
-      fields:
-        - name: internal_python_variable_name
-          type: text
-          label: Setting Friendly Display Name
-          value: ""
-          placeholder: demo prompt in the input box
-    - name: Login << Name of another section
-      fields:
-        - type: label
-          label: Just a little bit of extra info for the user to understand following settings
-        - name: username
-          type: text
-          label: Username
-          value: ""
-        - name: password
-          type: password
-          label: Password
-          value: ""
+   sections:
+      - name: Description
+        fields:
+          - name: Description
+            type: label
+            label: Create a Telegram Bot (with BotFather /newbot or /help) and enter the Token here.<p/>Connect up to two users with their Chat ID.<p/>To get the Chat ID go to https://api.telegram.org/bot<yourtoken>/getUpdates or fill in the Bot Token below (save) and write anything to your bot, it will give you your Chat ID.<p/>User fields are not used by the skill and exist only to know which Chat ID belongs to which user.<p/>Both Users have access to both devices and bots, but each Mycroft Device needs a unique TelegramBot. It is not possible to have two Mycroft Devices use one TelegramBot<p/>
+            value: "false"
+      - name: Settings
+        fields:
+          - name: MuteIt
+            type: checkbox
+            label: Mute answers when sending via Telegram
+            value: "false"
+          - name: TeleToken1
+            type: text
+            label: Bot Token (mandatory)
+            value: ""
+            placeholder: Bot Token
+          - name: MDevice1
+            type: text
+            label: Device Name (case sensitive | mandatory)
+            value: ""
+            placeholder: MyCroft Device Name
+          - name: User1
+            type: text
+            label: Primary Username (optional)
+            value: ""
+            placeholder: Username for first Chat ID
+          - name: TeleID1
+            type: number
+            label: Primary Chat ID (mandatory)
+            value: ""
+            placeholder: Chat ID
+      - name: Optional second User
+        fields:
+          - name: User2
+            type: text
+            label: Second Username (optional)
+            value: ""
+            placeholder: Username of second Chat ID
+          - name: TeleID2
+            type: number
+            label: Second Chat ID (optional)
+            value: ""
+            placeholder: Second Chat ID
+      - name: Optional second Device
+        fields:
+          - name: TeleToken2
+            type: text
+            label: Bot Token (optional)
+            value: ""
+            placeholder: Bot Token
+          - name: MDevice2
+            type: text
+            label: Device Name (case sensitive | optional)
+            value: ""
