@@ -1,57 +1,25 @@
 skillMetadata:
    sections:
-      - name: Description
-        fields:
-          - name: Description
-            type: label
-            label: Create a Telegram Bot (with BotFather /newbot or /help) and enter the Token here.<p/>Connect up to two users with their Chat ID.<p/>To get the Chat ID go to https://api.telegram.org/bot<yourtoken>/getUpdates or fill in the Bot Token below (save) and write anything to your bot, it will give you your Chat ID.<p/>User fields are not used by the skill and exist only to know which Chat ID belongs to which user.<p/>Both Users have access to both devices and bots, but each Mycroft Device needs a unique TelegramBot. It is not possible to have two Mycroft Devices use one TelegramBot<p/>
-            value: "false"
       - name: Settings
         fields:
           - name: MuteIt
             type: checkbox
-            label: Mute answers when sending via Telegram
+            label: Mute answers when sending via Mindx API
             value: "false"
-          - name: TeleToken1
+          - name: URL
             type: text
-            label: Bot Token (mandatory)
+            label: Engine URL
             value: ""
-            placeholder: Bot Token
-          - name: MDevice1
+            placeholder: Engine URL
+          - name: Auth Key
             type: text
-            label: Device Name (case sensitive | mandatory)
+            label: API_KEY
             value: ""
-            placeholder: MyCroft Device Name
-          - name: User1
+            placeholder: API_KEY
+          - name: Device
             type: text
-            label: Primary Username (optional)
+            label: Mycroft Device Name
             value: ""
-            placeholder: Username for first Chat ID
-          - name: TeleID1
-            type: number
-            label: Primary Chat ID (mandatory)
-            value: ""
-            placeholder: Chat ID
-      - name: Optional second User
-        fields:
-          - name: User2
-            type: text
-            label: Second Username (optional)
-            value: ""
-            placeholder: Username of second Chat ID
-          - name: TeleID2
-            type: number
-            label: Second Chat ID (optional)
-            value: ""
-            placeholder: Second Chat ID
-      - name: Optional second Device
-        fields:
-          - name: TeleToken2
-            type: text
-            label: Bot Token (optional)
-            value: ""
-            placeholder: Bot Token
-          - name: MDevice2
-            type: text
-            label: Device Name (case sensitive | optional)
-            value: ""
+            placeholder: Mycroft Device Name
+         	
+          
