@@ -15,18 +15,9 @@ skillMetadata:
             type: "text"
             label: "API_KEY"
             value: ""
-<<<<<<< Updated upstream
             placeholder: "API_KEY"
           - name: "Device"
             type: "text"
             label: "Mycroft Device Name"
             value: "Le Restaurant"
             placeholder: "Mycroft Device Name"
-=======
-            placeholder: API_KEY
-          - name: Device
-            type: text
-            label: Mycroft Device Name
-            value: ""
-            placeholder: Mycroft Device Name
->>>>>>> Stashed changes
