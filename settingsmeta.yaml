@@ -2,22 +2,22 @@ skillMetadata:
    sections:
       - name: Settings
         fields:
-          - name: MuteIt
-            type: checkbox
-            label: Mute answers when sending via Mindx API
+          - name: "MuteIt"
+            type: "checkbox"
+            label: "Mute answers when sending via Mindx API"
             value: "false"
-          - name: URL
-            type: text
-            label: Engine URL
+          - name: "URL"
+            type: "text"
+            label: "Engine URL"
             value: ""
-            placeholder: Engine URL
-          - name: Auth Key
-            type: text
-            label: API_KEY
+            placeholder: "Engine URL"
+          - name: "Auth Key"
+            type: "text"
+            label: "API_KEY"
             value: ""
-            placeholder: API_KEY
-          - name: Device
-            type: text
-            label: Mycroft Device Name
-            value: ""
-            placeholder: Mycroft Device Name
+            placeholder: "API_KEY"
+          - name: "Device"
+            type: "text"
+            label: "Mycroft Device Name"
+            value: "Le Restaurant"
+            placeholder: "Mycroft Device Name"
