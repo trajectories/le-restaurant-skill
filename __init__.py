@@ -13,38 +13,35 @@ class LeRestaurant(MycroftSkill):
         self.url = ""
         self.api_key = ""
         self.conversation_id = ""
+        
     
-    """
     def initialize(self):
-        self.url = self.setting.get("url")
-        self.api_key = self.setting.get("api_key")
-        global is_le_working
-        if is_le_working == 1:
+        if self.is_le_working == 1:
             self.add_event('recognizer_loop:utterance',
-                           self.sendMessageToMindX)
-    """   
-
+                           self.sendMessage)
+    
+    
     @intent_handler('restaurant.le.intent')
     def start_le_restaurant_skill(self):
         if self.is_le_working == 0:
             self.is_le_working = 1
             msg = "Le Restaurant skill is now active."
             logger.info(msg)
-            
+            self.url = self.settings.get("url")
+            self.api_key = self.settings.get("api_key")
             self.add_event('recognizer_loop:utterance',
-                           self.sendMessageToMindX)
-        self.url = self.settings.get("url")
-        self.api_key = self.settings.get("api_key")
+                           self.sendMessage)
         
-    def sendMessageToMindX(self, message):
+    def sendMessage(self, message):
         if self.is_le_working == 1:
             query = message.data.get("utterance")
             data = {"query": query}
             headers = {
                 "Content-Type": "application/json",
                 "Authorization": "Bearer "+self.api_key,
+                "X-Conversation-Id": self.conversation_id
             }
-            if headers["X-Conversation-Id"] is None:
+            if headers["X-Conversation-Id"] == "":
                 headers["X-Conversation-Id"] = self.conversation_id
             if query != "":
                 response = requests.post(self.url, headers=headers, json=data)
@@ -59,10 +56,10 @@ class LeRestaurant(MycroftSkill):
     def check_for_shutdown(self):
         if self.is_le_working == 0:
             self.remove_event('recognizer_loop:utterance',
-                           self.sendMessageToMindX)
+                           self.sendMessage)
             self.stop()
         else:
-            self.sendMessageToMindX()
+            self.sendMessage(self, message)
         
     def shutdown(self):  # shutdown routine
         if self.is_le_working == 0:
