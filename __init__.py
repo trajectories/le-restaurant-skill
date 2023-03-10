@@ -19,7 +19,7 @@ class LeRestaurant(MycroftSkill):
         self.api_key = self.setting.get("api_key")
         global is_le_working
         if is_le_working == 1:
-            self.add_event('le-restaurant-skill:response',
+            self.add_event('recognizer_loop:utterance',
                            self.sendMessageToMindX)
 
     @intent_handler('restaurant.le.intent')
@@ -30,22 +30,26 @@ class LeRestaurant(MycroftSkill):
             logger.info(msg)
 
     def sendMessageToMindX(self, message):
-        query = message.data.get("utterance")
-        data = {"query": query}
-        headers = {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer "+self.api_key,
-        }
-        if headers["X-Conversation-Id"] is None:
-            headers["X-Conversation-Id"] = self.conversation_id
-        if query != "":
-            response = requests.post(self.url, headers=headers, json=data)
-            response_data = response.json()
-            template = response_data['data']['channel-result'][0]['channel-message']['template']
-            self.conversation_id = response_data['data']['conversation_id']
-            self.bus.emit(Message("le-restaurant-skill:response",
-                      {"intent_name": "le-restaurant-response", "utterance": template}))
-            query = ""
+        self.url = self.setting.get("url")
+        self.api_key = self.setting.get("api_key")
+        global is_le_working
+        while is_le_working == 1:
+            query = message.data.get("utterance")
+            data = {"query": query}
+            headers = {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer "+self.api_key,
+            }
+            if headers["X-Conversation-Id"] is None:
+                headers["X-Conversation-Id"] = self.conversation_id
+            if query != "":
+                response = requests.post(self.url, headers=headers, json=data)
+                response_data = response.json()
+                template = response_data['data']['channel-result'][0]['channel-message']['template']
+                self.conversation_id = response_data['data']['conversation_id']
+                self.bus.emit(Message("le-restaurant-skill:response",
+                        {"intent_name": "le-restaurant-response", "utterance": template}))
+                query = ""
             
     def shutdown(self):  # shutdown routine
         if self.is_le_working == 0:
