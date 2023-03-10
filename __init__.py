@@ -19,12 +19,11 @@ class LeRestaurant(MycroftSkill):
         self.api_key = self.setting.get("api_key")
         global is_le_working
         if is_le_working == 1:
-            self.add_event('speak', self.sendMessageToMindX)
             self.add_event('le-restaurant-skill:response',
-                           self.responseHandler)
+                           self.sendMessageToMindX)
 
     @intent_handler('restaurant.le.intent')
-    def handle_mindx_query(self):
+    def start_le_restaurant_skill(self):
         if self.is_le_working == 0:
             self.is_le_working = 1
             msg = "Le Restaurant skill is now active."
