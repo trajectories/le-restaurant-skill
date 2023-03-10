@@ -2,18 +2,19 @@ skillMetadata:
    sections:
       - name: Settings
         fields:
-          - name: "URL"
+          - name: "url"
             type: "text"
             label: "Engine URL"
             value: ""
             placeholder: "Engine URL"
-          - name: "Auth Key"
+          - name: "api_key"
             type: "text"
             label: "API_KEY"
             value: ""
             placeholder: "API_KEY"
-          - name: "Device"
+          - name: "device"
             type: "text"
             label: "Mycroft Device Name"
             value: "Le Restaurant"
             placeholder: "Mycroft Device Name"
+            placeholder: API_KEY
