@@ -13,14 +13,17 @@ class LeRestaurant(MycroftSkill):
         self.url = ""
         self.api_key = ""
         self.conversation_id = ""
-        
-    def initialize(self):  # initialize routine
+    
+    """
+    def initialize(self):
         self.url = self.setting.get("url")
         self.api_key = self.setting.get("api_key")
-        if self.is_le_working == 1:
-            self.speak_dialog("restaurant.le.dialog")
-        
-        
+        global is_le_working
+        if is_le_working == 1:
+            self.add_event('recognizer_loop:utterance',
+                           self.sendMessageToMindX)
+    """   
+
     @intent_handler('restaurant.le.intent')
     def start_le_restaurant_skill(self):
         if self.is_le_working == 0:
@@ -28,24 +31,39 @@ class LeRestaurant(MycroftSkill):
             msg = "Le Restaurant skill is now active."
             logger.info(msg)
             
+            self.add_event('recognizer_loop:utterance',
+                           self.sendMessageToMindX)
+        self.url = self.settings.get("url")
+        self.api_key = self.settings.get("api_key")
+        
     def sendMessageToMindX(self, message):
-        query = message.data.get("utterance")
-        data = {"query": query}
-        headers = {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer "+self.api_key,
-        }
-        if headers["X-Conversation-Id"] is None:
-            headers["X-Conversation-Id"] = self.conversation_id
-        if query != "":
-            response = requests.post(self.url, headers=headers, json=data)
-            response_data = response.json()
-            template = response_data['data']['channel-result'][0]['channel-message']['template']
-            self.conversation_id = response_data['data']['conversation_id']
-            self.bus.emit(Message("le-restaurant-skill:response",
-                    {"intent_name": "le-restaurant-response", "utterance": template}))
-            query = ""
-            
+        if self.is_le_working == 1:
+            query = message.data.get("utterance")
+            data = {"query": query}
+            headers = {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer "+self.api_key,
+            }
+            if headers["X-Conversation-Id"] is None:
+                headers["X-Conversation-Id"] = self.conversation_id
+            if query != "":
+                response = requests.post(self.url, headers=headers, json=data)
+                response_data = response.json()
+                template = response_data['data']['channel-result'][0]['channel-message']['template']
+                self.conversation_id = response_data['data']['conversation_id']
+                self.bus.emit(Message("le-restaurant-skill:response",
+                        {"intent_name": "le-restaurant-response", "utterance": template}))
+                query = ""
+        self.check_for_shutdown()
+        
+    def check_for_shutdown(self):
+        if self.is_le_working == 0:
+            self.remove_event('recognizer_loop:utterance',
+                           self.sendMessageToMindX)
+            self.stop()
+        else:
+            self.sendMessageToMindX()
+        
     def shutdown(self):  # shutdown routine
         if self.is_le_working == 0:
             # shutdown skill
