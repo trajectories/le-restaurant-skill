@@ -2,10 +2,6 @@ skillMetadata:
    sections:
       - name: Settings
         fields:
-          - name: "MuteIt"
-            type: "checkbox"
-            label: "Mute answers when sending via Mindx API"
-            value: "false"
           - name: "URL"
             type: "text"
             label: "Engine URL"
