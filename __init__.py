@@ -10,24 +10,18 @@ from mycroft.messagebus.message import Message
 
 logger = getLogger(__name__)
 
-url = "https://mindx.mind.ai/api/v1/gateway/default/u0W0dvyUR9K_pUX5-bEZlg/2ILfgsKlSHi7bcFDc8DPnQ"
-api_key = 'kq2kYszSQGesoMhXZfmpXA'
-headers = {
-    "Content-Type": "application/json",
-    "Authorization": "Bearer "+api_key,
-}
-
-speak_le = 0
-loaded = 0
-audioinit = 0
-is_le_working = 0
-
 
 class LeRestaurant(MycroftSkill):
     def __init__(self):
         super(LeRestaurant, self).__init__(name="LeRestaurant")
-
+        self.is_le_working = 0
+        self.url = ""
+        self.api_key = ""
+        self.conversation_id = ""
+        
     def initialize(self):
+        self.url = self.setting.get("url")
+        self.api_key = self.setting.get("api_key")
         global is_le_working
         if is_le_working == 1:
             self.add_event('speak', self.sendMessageToMindX)
@@ -36,44 +30,39 @@ class LeRestaurant(MycroftSkill):
 
     @intent_handler('restaurant.le.intent')
     def handle_mindx_query(self):
-        global is_le_working
-        if is_le_working == 0:
-            is_le_working = 1
+        if self.is_le_working == 0:
+            self.is_le_working = 1
             msg = "Le Restaurant skill is now active."
             logger.info(msg)
 
     def sendMessageToMindX(self, message):
         query = message.data.get("utterance")
         data = {"query": query}
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer "+self.api_key,
+        }
         if headers["X-Conversation-Id"] is None:
-            headers["X-Conversation-Id"] = conversation_id
+            headers["X-Conversation-Id"] = self.conversation_id
         if query != "":
-            response = requests.post(url, headers=headers, json=data)
+            response = requests.post(self.url, headers=headers, json=data)
             response_data = response.json()
             template = response_data['data']['channel-result'][0]['channel-message']['template']
-            conversation_id = response_data['data']['conversation_id']
-            msg = update.message.template
-            logger.info("Le-restaurant-Message from MindX: " + msg)
-            self.bus.emit(Message('recognizer_loop:utterance', {"utterances": [
-                msg], "lang": self.lang}))  # , "session": session_id}))
+            self.conversation_id = response_data['data']['conversation_id']
+            self.bus.emit(Message("le-restaurant-skill:response",
+                      {"intent_name": "le-restaurant-response", "utterance": template}))
             query = ""
             
-    def responseHandler(self, message):
-        response = message.data.get("utterance")
-        self.bus.emit(Message("le-restaurant-skill:response",
-                      {"intent_name": "le-restaurant-response", "utterance": response}))
-
     def shutdown(self):  # shutdown routine
-        global is_le_working
-        if is_le_working == 0:
+        if self.is_le_working == 0:
             # shutdown skill
             super(LeRestaurant, self).shutdown()
 
     def stop(self):
-        global is_le_working
-        is_le_working = 0
+        self.is_le_working = 0
         msg = "Le Restaurant skill is now inactive."
         logger.info("Le-restaurant-Message from MindX: " + msg)
-        
+
+
 def create_skill():
     return LeRestaurant()
