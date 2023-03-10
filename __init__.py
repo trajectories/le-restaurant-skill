@@ -14,26 +14,19 @@ class LeRestaurant(MycroftSkill):
         self.api_key = ""
         self.conversation_id = ""
         
-    def initialize(self):
-        self.url = self.setting.get("url")
-        self.api_key = self.setting.get("api_key")
-        global is_le_working
-        if is_le_working == 1:
-            self.add_event('recognizer_loop:utterance',
-                           self.sendMessageToMindX)
-
     @intent_handler('restaurant.le.intent')
     def start_le_restaurant_skill(self):
         if self.is_le_working == 0:
             self.is_le_working = 1
             msg = "Le Restaurant skill is now active."
             logger.info(msg)
-
+            self.add_event('recognizer_loop:utterance',
+                           self.sendMessageToMindX)
+            
     def sendMessageToMindX(self, message):
         self.url = self.setting.get("url")
         self.api_key = self.setting.get("api_key")
-        global is_le_working
-        while is_le_working == 1:
+        while self.is_le_working == 1:
             query = message.data.get("utterance")
             data = {"query": query}
             headers = {
