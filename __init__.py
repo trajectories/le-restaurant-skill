@@ -1,11 +1,6 @@
 from mycroft import MycroftSkill, intent_handler
 import requests
-import json
 from mycroft.util.log import getLogger
-from alsaaudio import Mixer
-from mycroft.util.log import LOG
-from mycroft.api import DeviceApi
-from mycroft.audio import wait_while_speaking
 from mycroft.messagebus.message import Message
 
 logger = getLogger(__name__)
