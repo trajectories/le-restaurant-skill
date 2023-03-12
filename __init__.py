@@ -30,6 +30,7 @@ class LeRestaurant(MycroftSkill):
     def sendMessage(self, message):
         if self.is_le_working == 1:
             query = message.data.get("utterance")
+            self.bus.emit(Message('recognizer_loop:utterance',{"utterances": query ,"lang": self.lang}))
             data = {"query": query}
             headers = {
                 "Content-Type": "application/json",
