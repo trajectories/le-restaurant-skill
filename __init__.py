@@ -48,10 +48,12 @@ class LeRestaurant(MycroftSkill):
         global speak_tele
         if speak_le == 1:
             speak_le = 0
-            response_data = response.json()
-            template = response_data['data']['channel-result'][0]['channel-message']['template']
-            self.conversation_id = response_data['data']['conversation_id']
-            self.sendMycroftUtt(template)
+            if response.statys_code == 200:
+                logger.info("Connected to MindxAI.")
+                response_data = response.json()
+                template = response_data['data']['channel-result'][0]['channel-message']['template']
+                self.conversation_id = response_data['data']['conversation_id']
+                self.sendMycroftUtt(template)
             # self.bus.emit(Message("le-restaurant-skill:response",
             #                       {"intent_name": "le-restaurant-response", "utterance": template, "skill_id": self.skill_id}))
     
